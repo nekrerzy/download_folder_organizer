@@ -9,7 +9,7 @@ file_types = {
     "instaladores_rpm": [".rpm"],
     "archivos_iso": [".iso"],
     "archivos_ejecutables": [".sh"],
-    "documentos": [".doc", ".docx", ".pdf", ".txt", ".xls", ".xlsx"],
+    "documentos": [".doc", ".docx", ".pdf", ".txt", ".xls", ".xlsx", ".csv"],
     "imagenes": [".jpg", ".jpeg", ".png", ".gif", ".bmp"],
     "audio": [".mp3", ".wav", ".flac"],
     "video": [".mp4", ".webm", ".mkv", ".avi"],
