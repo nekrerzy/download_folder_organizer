@@ -1,0 +1,50 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Ajusta estas variables con los datos de tu entorno
+  acrName: 'baina01.azurecr.io'               # Nombre de tu ACR
+  imageName: 'myapp'                        # Nombre de la aplicación en Docker
+  tag: '$(Build.BuildId)'                   # Etiqueta única para la imagen
+  aksResourceGroup: 'my-aks-resource-group' # Grupo de recursos de AKS
+  aksClusterName: 'my-aks-cluster'          # Nombre del clúster de AKS
+  namespace: 'default'                      # Namespace en Kubernetes (ajústalo si es necesario)
+
+steps:
+- task: UseDocker@0
+  inputs:
+    command: 'login'
+    containerRegistry: 'acr'  # Reemplaza con la conexión de servicio a tu ACR
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "Building Docker image..."
+      docker build -t $(acrName)/$(imageName):$(tag) .
+  displayName: 'Build Docker Image'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "Pushing Docker image to ACR..."
+      docker push $(acrName)/$(imageName):$(tag)
+  displayName: 'Push Docker Image to ACR'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'myAzureServiceConnection'  # Conexión de servicio a Azure
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Connecting to AKS..."
+      az aks get-credentials --resource-group $(aksResourceGroup) --name $(aksClusterName)
+      
+      echo "Updating Kubernetes deployment..."
+      kubectl set image deployment/myapp myapp=$(acrName)/$(imageName):$(tag) -n $(namespace)
+      kubectl rollout status deployment/myapp -n $(namespace)
+  displayName: 'Deploy to AKS'
