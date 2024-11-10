@@ -8,18 +8,20 @@ pool:
 
 variables:
   
-  azureSubscription: 'NombreDeTuConexionDeServicio'
-  kubernetesCluster: 'NombreDeTuClusterAKS'
+  azureSubscriptionEndpoint: 'cool'
+  kubernetesCluster: 'dev-cool'
   namespace: 'default'
+  azureResourceGroup: 'cool-aks'
 
 steps:
   - task: Kubernetes@1
     inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscriptionEndpoint: 'cool'
-      azureResourceGroup: 'cool-aks'
-      kubernetesCluster: 'dev-cool'
-      namespace: 'default'
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureResourceGroup: $(azureResourceGroup)
+      kubernetesCluster: $(kubernetesCluster)
+      useClusterAdmin: true
+      namespace: $(namespace)
       command: 'apply'
       useConfigurationFile: true
       configurationType: 'inline'
@@ -46,11 +48,12 @@ steps:
 
   - task: Kubernetes@1
     inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscriptionEndpoint: 'cool'
-      azureResourceGroup: 'cool-aks'
-      kubernetesCluster: 'dev-cool'
-      namespace: 'default'
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureResourceGroup: $(azureResourceGroup)
+      kubernetesCluster: $(kubernetesCluster)
+      useClusterAdmin: true
+      namespace: $(namespace)
       command: 'apply'
       useConfigurationFile: true
       configurationType: 'inline'
