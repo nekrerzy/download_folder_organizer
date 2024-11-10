@@ -112,3 +112,14 @@ steps:
                     name: nginx-service
                     port:
                       number: 80
+
+  - task: Kubernetes@1
+    inputs:
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureResourceGroup: $(azureResourceGroup)
+      kubernetesCluster: $(kubernetesCluster)
+      useClusterAdmin: true
+      namespace: $(namespace)
+      command: 'get'
+      arguments: ing
