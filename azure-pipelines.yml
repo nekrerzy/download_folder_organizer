@@ -80,3 +80,35 @@ steps:
       namespace: $(namespace)
       command: 'get'
       arguments: svc
+
+  - task: Kubernetes@1
+    inputs:
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureResourceGroup: $(azureResourceGroup)
+      kubernetesCluster: $(kubernetesCluster)
+      useClusterAdmin: true
+      namespace: $(namespace)
+      command: 'apply'
+      useConfigurationFile: true
+      configurationType: 'inline'
+      inline: |
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: nginx-ingress
+          annotations:
+            kubernetes.io/ingress.class: azure/application-gateway
+            appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+            appgw.ingress.kubernetes.io/override-frontend-port: "80"
+        spec:
+          rules:
+          - http:
+              paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: nginx-service
+                    port:
+                      number: 80
