@@ -16,8 +16,8 @@ steps:
   - task: Kubernetes@1
     inputs:
       connectionType: 'Azure Resource Manager'
-      azureSubscriptionEndpoint: 'cool-rg'
-      azureResourceGroup: 'cool-rg'
+      azureSubscriptionEndpoint: 'cool'
+      azureResourceGroup: 'cool-aks'
       kubernetesCluster: 'cool-dev'
       namespace: 'default'
       command: 'apply'
@@ -47,8 +47,8 @@ steps:
   - task: Kubernetes@1
     inputs:
       connectionType: 'Azure Resource Manager'
-      azureSubscriptionEndpoint: 'cool-rg'
-      azureResourceGroup: 'cool-rg'
+      azureSubscriptionEndpoint: 'cool'
+      azureResourceGroup: 'cool-aks'
       kubernetesCluster: 'cool-dev'
       namespace: 'default'
       command: 'apply'
