@@ -69,3 +69,14 @@ steps:
               port: 80
               targetPort: 80
           type: LoadBalancer
+
+  - task: Kubernetes@1
+    inputs:
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureResourceGroup: $(azureResourceGroup)
+      kubernetesCluster: $(kubernetesCluster)
+      useClusterAdmin: true
+      namespace: $(namespace)
+      command: 'get'
+      arguments: svc
